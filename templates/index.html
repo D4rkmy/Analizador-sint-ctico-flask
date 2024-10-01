@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parser y Lexer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e3f2fd; /* Fondo azul claro */
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1976d2; /* Color de fondo del encabezado */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        h2 {
+            font-weight: 300;
+            margin: 5px 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff; /* Fondo blanco para el contenedor */
+            border-radius: 10px;
+        }
+        .input-area {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            border: 2px solid #1976d2;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            transition: border 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+        textarea:focus {
+            border-color: #1565c0; /* Color de borde al enfocar */
+            outline: none;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-analyze {
+            background-color: #28a745; /* Verde para el botón de analizar */
+        }
+        .btn-analyze:hover {
+            background-color: #218838; /* Color más oscuro al pasar el ratón */
+        }
+        .btn-clear {
+            background-color: #dc3545; /* Rojo para el botón de limpiar */
+        }
+        .btn-clear:hover {
+            background-color: #c82333; /* Color más oscuro al pasar el ratón */
+        }
+        h3 {
+            color: #1976d2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .output-area {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid #1976d2;
+            border-radius: 5px;
+            overflow: auto;
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: #f9f9f9; /* Fondo gris claro para el área de salida */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px; /* Tamaño de fuente reducido para la tabla */
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc; /* Borde inferior para las filas */
+        }
+        th {
+            background-color: #e3f2fd; /* Fondo de encabezados de tabla */
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #d1e7dd; /* Color de fondo para resaltar */
+            color: #000;
+        }
+        .error-message {
+            color: #dc3545; /* Color rojo para los mensajes de error */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ANÁLISIS LÉXICO Y SINTÁCTICO</h1>
+        <h2>LIC. BOCHO</h2>
+    </header>
+    
+    <div class="container">
+        <form method="POST">
+            <div class="input-area">
+                <textarea name="codigo" placeholder="Ingrese su código aquí..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-analyze">ANALIZAR</button>
+            </div>
+
+            <h3>ANÁLISIS LÉXICO</h3>
+
+            <div class="output-area">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>LINEA</th>
+                            <th>TOKEN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for linea, tokens in resultado_lexico %}
+                        <tr>
+                            <td class="highlight" colspan="2"><strong>{{ linea }}:</strong></td>
+                        </tr>
+                        {% for token in tokens %}
+                        <tr>
+                            <td>{{ token[0] }}</td>
+                            <td>{{ token[1] }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>ANÁLISIS SINTÁCTICO</h3>
+
+            <div class="output-area">
+                {% if resultado_sintactico %}
+                    <ul>
+                        {% for mensaje in resultado_sintactico %}
+                            <li class="{{ 'error-message' if 'Error' in mensaje else '' }}">{{ mensaje }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No se detectaron errores de sintaxis.</p>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
